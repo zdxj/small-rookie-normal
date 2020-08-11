@@ -1,0 +1,8 @@
+#当feignclient中name名称相同时，启动会报错，故开启。2.1之前默认开启，之后默认关闭了。也可以在feignclient中增加contextId来解决
+#例：@FeignClient(name="common-service", contextId = "exp")
+spring:
+  main:
+    allow-bean-definition-overriding: true
+feign:
+  hystrix:
+    enabled: true

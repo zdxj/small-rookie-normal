@@ -1,0 +1,29 @@
+server:
+  port: 8764
+spring:
+  application:
+    name: system-core
+ #当feignclient中name名称相同时，启动会报错，故开启。2.1之前默认开启，之后默认关闭了。也可以在feignclient中增加contextId来解决
+ #例：@FeignClient(name="common-service", contextId = "exp")
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    config:
+      discovery:
+        #开启Config服务发现支持
+        enabled: true
+        #指定server端的name
+        service-id: config-server
+      name: spring-config
+      profile: dev
+      label: master
+eureka:
+  instance:
+    hostname: ${spring.cloud.client.ip-address}
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+feign:
+  hystrix:
+    enabled: true

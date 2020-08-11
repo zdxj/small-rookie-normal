@@ -1,0 +1,13 @@
+package com.zdxj;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class MemberCoreApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(MemberCoreApplication.class, args);
+    }
+
+}

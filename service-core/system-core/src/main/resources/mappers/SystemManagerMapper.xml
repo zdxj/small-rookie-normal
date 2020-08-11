@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zdxj.mapper.SystemManagerMapper">
+		<resultMap id="BaseResultMap" type="com.zdxj.model.SystemManagerEntity">
+		   <id column="id" jdbcType="INTEGER" property="id" />
+		   <result column="is_deleted" jdbcType="BIT" property="deleted" />
+		   <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		   <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		   <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+		   <result column="login_password" jdbcType="VARCHAR" property="loginPassword" />
+		   <result column="real_name" jdbcType="VARCHAR" property="realName" />
+		   <result column="department_id" jdbcType="INTEGER" property="departmentId" />
+		   <result column="login_ip" jdbcType="VARCHAR" property="loginIp" />
+		   <result column="login_time" jdbcType="TIMESTAMP" property="loginTime" />
+		   <result column="login_error_time" jdbcType="TIMESTAMP" property="loginErrorTime" />
+		   <result column="login_error_count" jdbcType="INTEGER" property="loginErrorCount" />
+		   <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+		   <result column="head_image" jdbcType="VARCHAR" property="headImage" />
+		   <result column="note" jdbcType="VARCHAR" property="note" />
+		   <result column="is_enable" jdbcType="BIT" property="enable" />
+	  </resultMap>
+	
+	  <insert id="saveEntity" parameterType="com.zdxj.model.SystemManagerEntity" useGeneratedKeys="true" keyProperty="id">
+	    insert into system_manager
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+	      <if test="id != null">id,</if>
+	      <if test="deleted != null">is_deleted,</if>
+	      <if test="createTime != null">create_time,</if>
+	      <if test="updateTime != null">update_time,</if>
+	      <if test="loginName != null">login_name,</if>
+	      <if test="loginPassword != null">login_password,</if>
+	      <if test="realName != null">real_name,</if>
+	      <if test="departmentId != null">department_id,</if>
+	      <if test="loginIp != null">login_ip,</if>
+	      <if test="loginTime != null">login_time,</if>
+	      <if test="loginErrorTime != null">login_error_time,</if>
+	      <if test="loginErrorCount != null">login_error_count,</if>
+	      <if test="mobile != null">mobile,</if>
+	      <if test="headImage != null">head_image,</if>
+	      <if test="note != null">note,</if>
+	      <if test="enable != null">is_enable,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">#{id},</if>
+	      <if test="deleted != null">#{deleted},</if>
+	      <if test="createTime != null">#{createTime},</if>
+	      <if test="updateTime != null">#{updateTime},</if>
+	      <if test="loginName != null">#{loginName},</if>
+	      <if test="loginPassword != null">#{loginPassword},</if>
+	      <if test="realName != null">#{realName},</if>
+	      <if test="departmentId != null">#{departmentId},</if>
+	      <if test="loginIp != null">#{loginIp},</if>
+	      <if test="loginTime != null">#{loginTime},</if>
+	      <if test="loginErrorTime != null">#{loginErrorTime},</if>
+	      <if test="loginErrorCount != null">#{loginErrorCount},</if>
+	      <if test="mobile != null">#{mobile},</if>
+	      <if test="headImage != null">#{headImage},</if>
+	      <if test="note != null">#{note},</if>
+	      <if test="enable != null">#{enable},</if>
+	    </trim>
+	  </insert>
+	
+	  <update id="updateEntity" parameterType="com.zdxj.model.SystemManagerEntity" >
+	    update system_manager
+	    <set >
+	      <if test="deleted != null">is_deleted = #{deleted},</if>
+	      <if test="createTime != null">create_time = #{createTime},</if>
+	      <if test="updateTime != null">update_time = #{updateTime},</if>
+	      <if test="loginName != null">login_name = #{loginName},</if>
+	      <if test="loginPassword != null">login_password = #{loginPassword},</if>
+	      <if test="realName != null">real_name = #{realName},</if>
+	      <if test="departmentId != null">department_id = #{departmentId},</if>
+	      <if test="loginIp != null">login_ip = #{loginIp},</if>
+	      <if test="loginTime != null">login_time = #{loginTime},</if>
+	      <if test="loginErrorTime != null">login_error_time = #{loginErrorTime},</if>
+	      <if test="loginErrorCount != null">login_error_count = #{loginErrorCount},</if>
+	      <if test="mobile != null">mobile = #{mobile},</if>
+	      <if test="headImage != null">head_image = #{headImage},</if>
+	      <if test="note != null">note = #{note},</if>
+	      <if test="enable != null">is_enable = #{enable},</if>
+	    </set>
+	    where id = #{id}
+	  </update>
+	
+	    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+	      select * from  system_manager where id = #{id}
+		</select>
+	
+	    <select id="listByCondition" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+	        select * from system_manager
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	        <if test="orderbys != null">
+	            order by
+	            <foreach collection="orderbys.keys" item="k" index="index" separator=",">
+	                ${k} ${orderbys[k]}
+	            </foreach>
+	        </if>
+	        <if test="pageSize != null">
+	            limit #{startIndex}, #{pageSize}
+	        </if>
+	    </select>
+	
+	    <select id="listIds" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+	        select id from system_manager
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	        <if test="orderbys != null">
+	            order by
+	            <foreach collection="orderbys.keys" item="k" index="index" separator=",">
+	                ${k} ${orderbys[k]}
+	            </foreach>
+	        </if>
+	        <if test="pageSize != null">
+	            limit #{startIndex}, #{pageSize}
+	        </if>
+	    </select>
+	
+	    <select id="countByCondition" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	        select count(*) from system_manager
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	    </select>
+	
+	   <delete id="deleteByIds" parameterType="java.util.ArrayList">
+	       delete from system_manager
+	       where id in
+	       <foreach collection="list" index="index" item="itemId" open="(" separator="," close=")">
+	           #{itemId}
+	       </foreach>
+	   </delete>
+	
+	    <sql id="query_where">
+	        <if test="id  !=  null">and id = #{id}</if>
+	        <if test="deleted  !=  null">and is_deleted = #{deleted}</if>
+	        <if test="createTime  !=  null">and create_time = #{createTime}</if>
+	        <if test="updateTime  !=  null">and update_time = #{updateTime}</if>
+	        <if test="loginName  !=  null">and login_name = #{loginName}</if>
+	        <if test="loginPassword  !=  null">and login_password = #{loginPassword}</if>
+	        <if test="realName  !=  null">and real_name = #{realName}</if>
+	        <if test="departmentId  !=  null">and department_id = #{departmentId}</if>
+	        <if test="loginIp  !=  null">and login_ip = #{loginIp}</if>
+	        <if test="loginTime  !=  null">and login_time = #{loginTime}</if>
+	        <if test="loginErrorTime  !=  null">and login_error_time = #{loginErrorTime}</if>
+	        <if test="loginErrorCount  !=  null">and login_error_count = #{loginErrorCount}</if>
+	        <if test="mobile  !=  null">and mobile = #{mobile}</if>
+	        <if test="headImage  !=  null">and head_image = #{headImage}</if>
+	        <if test="note  !=  null">and note = #{note}</if>
+	        <if test="enable  !=  null">and is_enable = #{enable}</if>
+	        <if test="parentDeptId  !=  null">
+	        	and (department_id = #{parentDeptId} OR department_id IN ( SELECT id FROM department  WHERE FIND_IN_SET (#{parentDeptId},ancestors) ))
+	        </if>
+	        <if test="loginNameLike != null">and login_name like CONCAT('%',#{loginNameLike},'%') ESCAPE '/'</if>
+	        <if test="realNameLike != null">and real_name like CONCAT('%',#{realNameLike},'%') ESCAPE '/'</if>
+	        <if test="mobileLike != null">and mobile like CONCAT('%',#{mobileLike},'%') ESCAPE '/'</if>
+	    </sql>
+	
+</mapper>

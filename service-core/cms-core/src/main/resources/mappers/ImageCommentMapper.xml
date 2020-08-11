@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zdxj.mapper.ImageCommentMapper">
+		<resultMap id="BaseResultMap" type="com.zdxj.model.ImageCommentEntity">
+		   <id column="id" jdbcType="INTEGER" property="id" />
+		   <result column="is_deleted" jdbcType="BIT" property="deleted" />
+		   <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		   <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		   <result column="image_id" jdbcType="INTEGER" property="imageId" />
+		   <result column="member_id" jdbcType="INTEGER" property="memberId" />
+		   <result column="comment" jdbcType="VARCHAR" property="comment" />
+		   <result column="support_count" jdbcType="INTEGER" property="supportCount" />
+	  </resultMap>
+	
+	  <insert id="saveEntity" parameterType="com.zdxj.model.ImageCommentEntity" useGeneratedKeys="true" keyProperty="id">
+	    insert into image_comment
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+	      <if test="id != null">id,</if>
+	      <if test="deleted != null">is_deleted,</if>
+	      <if test="createTime != null">create_time,</if>
+	      <if test="updateTime != null">update_time,</if>
+	      <if test="imageId != null">image_id,</if>
+	      <if test="memberId != null">member_id,</if>
+	      <if test="comment != null">comment,</if>
+	      <if test="supportCount != null">support_count,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">#{id},</if>
+	      <if test="deleted != null">#{deleted},</if>
+	      <if test="createTime != null">#{createTime},</if>
+	      <if test="updateTime != null">#{updateTime},</if>
+	      <if test="imageId != null">#{imageId},</if>
+	      <if test="memberId != null">#{memberId},</if>
+	      <if test="comment != null">#{comment},</if>
+	      <if test="supportCount != null">#{supportCount},</if>
+	    </trim>
+	  </insert>
+	
+	  <update id="updateEntity" parameterType="com.zdxj.model.ImageCommentEntity" >
+	    update image_comment
+	    <set >
+	      <if test="deleted != null">is_deleted = #{deleted},</if>
+	      <if test="createTime != null">create_time = #{createTime},</if>
+	      <if test="updateTime != null">update_time = #{updateTime},</if>
+	      <if test="imageId != null">image_id = #{imageId},</if>
+	      <if test="memberId != null">member_id = #{memberId},</if>
+	      <if test="comment != null">comment = #{comment},</if>
+	      <if test="supportCount != null">support_count = #{supportCount},</if>
+	    </set>
+	    where id = #{id}
+	  </update>
+	
+	    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+	      select * from  image_comment where id = #{id}
+		</select>
+	
+	    <select id="listByCondition" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+	        select * from image_comment
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	        <if test="orderbys != null">
+	            order by
+	            <foreach collection="orderbys.keys" item="k" index="index" separator=",">
+	                ${k} ${orderbys[k]}
+	            </foreach>
+	        </if>
+	        <if test="pageSize != null">
+	            limit #{startIndex}, #{pageSize}
+	        </if>
+	    </select>
+	
+	    <select id="listIds" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+	        select id from image_comment
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	        <if test="orderbys != null">
+	            order by
+	            <foreach collection="orderbys.keys" item="k" index="index" separator=",">
+	                ${k} ${orderbys[k]}
+	            </foreach>
+	        </if>
+	        <if test="pageSize != null">
+	            limit #{startIndex}, #{pageSize}
+	        </if>
+	    </select>
+	
+	    <select id="countByCondition" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	        select count(*) from image_comment
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	    </select>
+	
+	   <delete id="deleteByIds" parameterType="java.util.ArrayList">
+	       delete from image_comment
+	       where id in
+	       <foreach collection="list" index="index" item="itemId" open="(" separator="," close=")">
+	           #{itemId}
+	       </foreach>
+	   </delete>
+	
+	    <sql id="query_where">
+	        <if test="id  !=  null">and id = #{id}</if>
+	        <if test="deleted  !=  null">and is_deleted = #{deleted}</if>
+	        <if test="createTime  !=  null">and create_time = #{createTime}</if>
+	        <if test="updateTime  !=  null">and update_time = #{updateTime}</if>
+	        <if test="imageId  !=  null">and image_id = #{imageId}</if>
+	        <if test="memberId  !=  null">and member_id = #{memberId}</if>
+	        <if test="comment  !=  null">and comment = #{comment}</if>
+	        <if test="supportCount  !=  null">and support_count = #{supportCount}</if>
+	    </sql>
+	
+</mapper>

@@ -1,0 +1,67 @@
+server:
+  port: 8763
+eureka:
+  instance:
+    hostname: ${spring.cloud.client.ip-address}
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+spring:
+  application:
+    name: gateway-server
+  cloud:
+    config:
+      discovery:
+        #开启Config服务发现支持
+        enabled: true
+        #指定server端的name
+        service-id: config-server
+      name: spring-config
+      profile: dev
+      label: master
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          #服务访问路径的名字使用小写，如不设置必须写大写
+          lower-case-service-id: true
+      # 以下配置路由地址
+      routes:
+      #####后台管理系统######
+      - id: system-api
+        ## 必须使用http进行转发，lb代表从注册中心获取服务
+        uri: lb://system-core
+        predicates:
+        - Path=/systemApi/**,/systemV1/**
+        # http://localhost:port/systemApi/listAll, 必须加上StripPrefix=1，否则访问服务时会带上systemApi
+        filters:
+        - StripPrefix=1
+        - name: Hystrix
+          args:
+            name: fallbackcmd
+            fallbackUri: forward:/fallback
+      #####后台cms系统######
+      - id: cms-api
+        ## 必须使用http进行转发，lb代表从注册中心获取服务
+        uri: lb://cms-core
+        predicates:
+        - Path=/cmsApi/**,/cmsV1/**
+        filters:
+        - StripPrefix=1
+        - name: Hystrix
+          args:
+            name: fallbackcmd
+            fallbackUri: forward:/fallback
+      #####后台timer系统######
+      - id: timer-api
+        ## 必须使用http进行转发，lb代表从注册中心获取服务
+        uri: lb://timer-core
+        predicates:
+        - Path=/timerApi/**
+        filters:
+        - StripPrefix=1
+        - name: Hystrix
+          args:
+            name: fallbackcmd
+            fallbackUri: forward:/fallback

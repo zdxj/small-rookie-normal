@@ -1,0 +1,22 @@
+server:
+  port: 8765
+spring:
+  application:
+    name: cms-core
+  cloud:
+    config:
+      discovery:
+        #开启Config服务发现支持
+        enabled: true
+        #指定server端的name
+        service-id: config-server
+      name: spring-config
+      profile: dev
+      label: master
+eureka:
+  instance:
+    hostname: ${spring.cloud.client.ip-address}
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

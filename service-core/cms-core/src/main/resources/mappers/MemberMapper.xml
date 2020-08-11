@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zdxj.mapper.MemberMapper">
+		<resultMap id="BaseResultMap" type="com.zdxj.model.MemberEntity">
+		   <id column="id" jdbcType="INTEGER" property="id" />
+		   <result column="is_deleted" jdbcType="BIT" property="deleted" />
+		   <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		   <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		   <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+		   <result column="head_image" jdbcType="VARCHAR" property="headImage" />
+		   <result column="level_id" jdbcType="INTEGER" property="levelId" />
+	  </resultMap>
+	
+	  <insert id="saveEntity" parameterType="com.zdxj.model.MemberEntity" useGeneratedKeys="true" keyProperty="id">
+	    insert into member
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+	      <if test="id != null">id,</if>
+	      <if test="deleted != null">is_deleted,</if>
+	      <if test="createTime != null">create_time,</if>
+	      <if test="updateTime != null">update_time,</if>
+	      <if test="nickName != null">nick_name,</if>
+	      <if test="headImage != null">head_image,</if>
+	      <if test="levelId != null">level_id,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">#{id},</if>
+	      <if test="deleted != null">#{deleted},</if>
+	      <if test="createTime != null">#{createTime},</if>
+	      <if test="updateTime != null">#{updateTime},</if>
+	      <if test="nickName != null">#{nickName},</if>
+	      <if test="headImage != null">#{headImage},</if>
+	      <if test="levelId != null">#{levelId},</if>
+	    </trim>
+	  </insert>
+	
+	  <update id="updateEntity" parameterType="com.zdxj.model.MemberEntity" >
+	    update member
+	    <set >
+	      <if test="deleted != null">is_deleted = #{deleted},</if>
+	      <if test="createTime != null">create_time = #{createTime},</if>
+	      <if test="updateTime != null">update_time = #{updateTime},</if>
+	      <if test="nickName != null">nick_name = #{nickName},</if>
+	      <if test="headImage != null">head_image = #{headImage},</if>
+	      <if test="levelId != null">level_id = #{levelId},</if>
+	    </set>
+	    where id = #{id}
+	  </update>
+	
+	    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+	      select * from  member where id = #{id}
+		</select>
+	
+	    <select id="listByCondition" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+	        select * from member
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	        <if test="orderbys != null">
+	            order by
+	            <foreach collection="orderbys.keys" item="k" index="index" separator=",">
+	                ${k} ${orderbys[k]}
+	            </foreach>
+	        </if>
+	        <if test="pageSize != null">
+	            limit #{startIndex}, #{pageSize}
+	        </if>
+	    </select>
+	
+	    <select id="listIds" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+	        select id from member
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	        <if test="orderbys != null">
+	            order by
+	            <foreach collection="orderbys.keys" item="k" index="index" separator=",">
+	                ${k} ${orderbys[k]}
+	            </foreach>
+	        </if>
+	        <if test="pageSize != null">
+	            limit #{startIndex}, #{pageSize}
+	        </if>
+	    </select>
+	
+	    <select id="countByCondition" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	        select count(*) from member
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	    </select>
+	
+	   <delete id="deleteByIds" parameterType="java.util.ArrayList">
+	       delete from member
+	       where id in
+	       <foreach collection="list" index="index" item="itemId" open="(" separator="," close=")">
+	           #{itemId}
+	       </foreach>
+	   </delete>
+	
+	    <sql id="query_where">
+	        <if test="id  !=  null">and id = #{id}</if>
+	        <if test="deleted  !=  null">and is_deleted = #{deleted}</if>
+	        <if test="createTime  !=  null">and create_time = #{createTime}</if>
+	        <if test="updateTime  !=  null">and update_time = #{updateTime}</if>
+	        <if test="nickName  !=  null">and nick_name = #{nickName}</if>
+	        <if test="headImage  !=  null">and head_image = #{headImage}</if>
+	        <if test="levelId  !=  null">and level_id = #{levelId}</if>
+	        <if test="nickNameLike != null">and nick_name like CONCAT('%',#{nickNameLike},'%') ESCAPE '/'</if>
+	    </sql>
+	
+</mapper>

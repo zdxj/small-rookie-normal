@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zdxj.mapper.ManagerRoleRelMapper">
+		<resultMap id="BaseResultMap" type="com.zdxj.model.ManagerRoleRelEntity">
+		   <id column="id" jdbcType="INTEGER" property="id" />
+		   <result column="is_deleted" jdbcType="BIT" property="deleted" />
+		   <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		   <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		   <result column="manager_id" jdbcType="INTEGER" property="managerId" />
+		   <result column="role_id" jdbcType="INTEGER" property="roleId" />
+	  </resultMap>
+	
+	  <insert id="saveEntity" parameterType="com.zdxj.model.ManagerRoleRelEntity" useGeneratedKeys="true" keyProperty="id">
+	    insert into manager_role_rel
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+	      <if test="id != null">id,</if>
+	      <if test="deleted != null">is_deleted,</if>
+	      <if test="createTime != null">create_time,</if>
+	      <if test="updateTime != null">update_time,</if>
+	      <if test="managerId != null">manager_id,</if>
+	      <if test="roleId != null">role_id,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">#{id},</if>
+	      <if test="deleted != null">#{deleted},</if>
+	      <if test="createTime != null">#{createTime},</if>
+	      <if test="updateTime != null">#{updateTime},</if>
+	      <if test="managerId != null">#{managerId},</if>
+	      <if test="roleId != null">#{roleId},</if>
+	    </trim>
+	  </insert>
+	
+	  <update id="updateEntity" parameterType="com.zdxj.model.ManagerRoleRelEntity" >
+	    update manager_role_rel
+	    <set >
+	      <if test="deleted != null">is_deleted = #{deleted},</if>
+	      <if test="createTime != null">create_time = #{createTime},</if>
+	      <if test="updateTime != null">update_time = #{updateTime},</if>
+	      <if test="managerId != null">manager_id = #{managerId},</if>
+	      <if test="roleId != null">role_id = #{roleId},</if>
+	    </set>
+	    where id = #{id}
+	  </update>
+	
+	    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+	      select * from  manager_role_rel where id = #{id}
+		</select>
+	
+	    <select id="listByCondition" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+	        select * from manager_role_rel
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	        <if test="orderbys != null">
+	            order by
+	            <foreach collection="orderbys.keys" item="k" index="index" separator=",">
+	                ${k} ${orderbys[k]}
+	            </foreach>
+	        </if>
+	        <if test="pageSize != null">
+	            limit #{startIndex}, #{pageSize}
+	        </if>
+	    </select>
+	
+	    <select id="listIds" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+	        select id from manager_role_rel
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	        <if test="orderbys != null">
+	            order by
+	            <foreach collection="orderbys.keys" item="k" index="index" separator=",">
+	                ${k} ${orderbys[k]}
+	            </foreach>
+	        </if>
+	        <if test="pageSize != null">
+	            limit #{startIndex}, #{pageSize}
+	        </if>
+	    </select>
+	
+	    <select id="countByCondition" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	        select count(*) from manager_role_rel
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	    </select>
+	
+	   <delete id="deleteByIds" parameterType="java.util.ArrayList">
+	       delete from manager_role_rel
+	       where id in
+	       <foreach collection="list" index="index" item="itemId" open="(" separator="," close=")">
+	           #{itemId}
+	       </foreach>
+	   </delete>
+		
+		<!-- 根据管理员ID获取管理员角色ID -->
+		<select id="listRoleIdsByManagerId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+			select role_id from manager_role_rel where manager_id = #{managerId}
+		</select>
+		
+		<delete id="delRelByManagerIds" parameterType="java.util.ArrayList">
+			delete from manager_role_rel WHERE manager_id in
+			<foreach collection="list" index="index" item="itemId" open="(" separator="," close=")">
+	           #{itemId}
+	       </foreach>
+		</delete>
+		
+		<insert id="saveByBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+			INSERT INTO manager_role_rel(is_deleted,create_time,update_time,manager_id,role_id) 
+			VALUES 
+		    <foreach collection="list" item="item" index="index" separator="," >  
+		         (#{item.deleted},#{item.createTime},#{item.updateTime},#{item.managerId},#{item.roleId})
+		    </foreach>  
+		</insert>
+	
+	    <sql id="query_where">
+	        <if test="id  !=  null">and id = #{id}</if>
+	        <if test="deleted  !=  null">and is_deleted = #{deleted}</if>
+	        <if test="createTime  !=  null">and create_time = #{createTime}</if>
+	        <if test="updateTime  !=  null">and update_time = #{updateTime}</if>
+	        <if test="managerId  !=  null">and manager_id = #{managerId}</if>
+	        <if test="roleId  !=  null">and role_id = #{roleId}</if>
+	    </sql>
+	
+</mapper>

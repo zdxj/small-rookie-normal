@@ -1,0 +1,36 @@
+server:
+  port: 8081
+  servlet:
+    encoding:      charset: UTF-8
+      enabled: true
+      force: true
+    session:
+      tracking-modes:
+      - cookie
+      cookie:
+        http-only: true
+        #cookie自定义name
+        name: m597e398d0138469
+        secure: false
+        domain: localhost
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  application:
+    name: web-m
+  messages:
+    encoding: UTF-8
+  cloud:
+    config:
+      discovery:
+        #开启Config服务发现支持
+        enabled: true
+        #指定server端的name
+        service-id: config-server
+      name: spring-config
+      profile: dev
+      label: master
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

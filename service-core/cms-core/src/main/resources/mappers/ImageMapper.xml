@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zdxj.mapper.ImageMapper">
+		<resultMap id="BaseResultMap" type="com.zdxj.model.ImageEntity">
+		   <id column="id" jdbcType="INTEGER" property="id" />
+		   <result column="is_deleted" jdbcType="BIT" property="deleted" />
+		   <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		   <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		   <result column="name" jdbcType="VARCHAR" property="name" />
+		   <result column="note" jdbcType="VARCHAR" property="note" />
+		   <result column="path" jdbcType="VARCHAR" property="path" />
+		   <result column="video" jdbcType="VARCHAR" property="video" />
+		   <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+		   <result column="author" jdbcType="VARCHAR" property="author" />
+		   <result column="head_image" jdbcType="VARCHAR" property="headImage" />
+		   <result column="support_count" jdbcType="INTEGER" property="supportCount" />
+		   <result column="position" jdbcType="INTEGER" property="position" />
+	  </resultMap>
+	
+	  <insert id="saveEntity" parameterType="com.zdxj.model.ImageEntity" useGeneratedKeys="true" keyProperty="id">
+	    insert into image
+	    <trim prefix="(" suffix=")" suffixOverrides=",">
+	      <if test="id != null">id,</if>
+	      <if test="deleted != null">is_deleted,</if>
+	      <if test="createTime != null">create_time,</if>
+	      <if test="updateTime != null">update_time,</if>
+	      <if test="name != null">name,</if>
+	      <if test="note != null">note,</if>
+	      <if test="path != null">path,</if>
+	      <if test="video != null">video,</if>
+	      <if test="categoryId != null">category_id,</if>
+	      <if test="author != null">author,</if>
+	      <if test="headImage != null">head_image,</if>
+	      <if test="supportCount != null">support_count,</if>
+	      <if test="position != null">position,</if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides=",">
+	      <if test="id != null">#{id},</if>
+	      <if test="deleted != null">#{deleted},</if>
+	      <if test="createTime != null">#{createTime},</if>
+	      <if test="updateTime != null">#{updateTime},</if>
+	      <if test="name != null">#{name},</if>
+	      <if test="note != null">#{note},</if>
+	      <if test="path != null">#{path},</if>
+	      <if test="video != null">#{video},</if>
+	      <if test="categoryId != null">#{categoryId},</if>
+	      <if test="author != null">#{author},</if>
+	      <if test="headImage != null">#{headImage},</if>
+	      <if test="supportCount != null">#{supportCount},</if>
+	      <if test="position != null">#{position},</if>
+	    </trim>
+	  </insert>
+	
+	  <update id="updateEntity" parameterType="com.zdxj.model.ImageEntity" >
+	    update image
+	    <set >
+	      <if test="deleted != null">is_deleted = #{deleted},</if>
+	      <if test="createTime != null">create_time = #{createTime},</if>
+	      <if test="updateTime != null">update_time = #{updateTime},</if>
+	      <if test="name != null">name = #{name},</if>
+	      <if test="note != null">note = #{note},</if>
+	      <if test="path != null">path = #{path},</if>
+	      <if test="video != null">video = #{video},</if>
+	      <if test="categoryId != null">category_id = #{categoryId},</if>
+	      <if test="author != null">author = #{author},</if>
+	      <if test="headImage != null">head_image = #{headImage},</if>
+	      <if test="supportCount != null">support_count = #{supportCount},</if>
+	      <if test="position != null">position = #{position},</if>
+	    </set>
+	    where id = #{id}
+	  </update>
+	
+	    <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+	      select * from  image where id = #{id}
+		</select>
+	
+	    <select id="listByCondition" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+	        select * from image
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	        <if test="orderbys != null">
+	            order by
+	            <foreach collection="orderbys.keys" item="k" index="index" separator=",">
+	                ${k} ${orderbys[k]}
+	            </foreach>
+	        </if>
+	        <if test="pageSize != null">
+	            limit #{startIndex}, #{pageSize}
+	        </if>
+	    </select>
+	
+	    <select id="listIds" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+	        select id from image
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	        <if test="orderbys != null">
+	            order by
+	            <foreach collection="orderbys.keys" item="k" index="index" separator=",">
+	                ${k} ${orderbys[k]}
+	            </foreach>
+	        </if>
+	        <if test="pageSize != null">
+	            limit #{startIndex}, #{pageSize}
+	        </if>
+	    </select>
+	
+	    <select id="countByCondition" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+	        select count(*) from image
+	        <where>
+	            <include refid="query_where"></include>
+	        </where>
+	    </select>
+	
+	   <delete id="deleteByIds" parameterType="java.util.ArrayList">
+	       delete from image
+	       where id in
+	       <foreach collection="list" index="index" item="itemId" open="(" separator="," close=")">
+	           #{itemId}
+	       </foreach>
+	   </delete>
+	
+	    <sql id="query_where">
+	        <if test="id  !=  null">and id = #{id}</if>
+	        <if test="deleted  !=  null">and is_deleted = #{deleted}</if>
+	        <if test="createTime  !=  null">and create_time = #{createTime}</if>
+	        <if test="updateTime  !=  null">and update_time = #{updateTime}</if>
+	        <if test="name  !=  null">and name = #{name}</if>
+	        <if test="note  !=  null">and note = #{note}</if>
+	        <if test="path  !=  null">and path = #{path}</if>
+	        <if test="video  !=  null">and video = #{video}</if>
+	        <if test="categoryId  !=  null">and category_id = #{categoryId}</if>
+	        <if test="supportCount  !=  null">and support_count = #{supportCount}</if>
+	        <if test="author  !=  null">and author = #{author}</if>
+	        <if test="namheadImagee  !=  null">and head_image = #{headImage}</if>
+	        <if test="position  !=  null">and position = #{position}</if>
+	        <if test="nameLike != null">and name like CONCAT('%',#{nameLike},'%') ESCAPE '/'</if>
+	    </sql>
+	
+</mapper>
